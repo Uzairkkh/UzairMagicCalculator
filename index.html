@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>UzairMagicCalcu</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(circle at top, #420000, #090909 65%);
+
+    font-family: Arial, sans-serif;
+    color: white;
+
+    padding: 15px;
+}
+
+
+/* =========================
+   MAIN CARD
+========================= */
+
+.card {
+    width: min(94vw, 390px);
+
+    background: #0b0b0b;
+
+    border: 1px solid #650000;
+
+    border-radius: 24px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 0 35px #000,
+        0 0 20px #55000055;
+}
+
+
+h1 {
+    text-align: center;
+
+    margin: 4px 0 14px;
+
+    font-size: 25px;
+
+    color: #ff2020;
+
+    text-shadow:
+        0 0 12px #ff0000;
+}
+
+
+/* =========================
+   CALCULATOR DISPLAY
+========================= */
+
+.display {
+    width: 100%;
+
+    height: 76px;
+
+    background: #020202;
+
+    color: white;
+
+    border: 1px solid #550000;
+
+    border-radius: 15px;
+
+    text-align: right;
+
+    padding: 12px;
+
+    font-size: 30px;
+
+    outline: none;
+}
+
+
+/* =========================
+   CALCULATOR BUTTONS
+========================= */
+
+.keys {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 9px;
+
+    margin-top: 12px;
+}
+
+
+button {
+
+    height: 58px;
+
+    border: 0;
+
+    border-radius: 14px;
+
+    background: #1c1c1c;
+
+    color: white;
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    transition: 0.12s;
+
+    touch-action: manipulation;
+}
+
+
+button:hover {
+
+    background: #333;
+
+}
+
+
+button:active {
+
+    transform: scale(0.94);
+
+}
+
+
+.op {
+
+    background: #350000;
+
+}
+
+
+.eq {
+
+    background: #a50000;
+
+}
+
+
+.clear {
+
+    background: #700000;
+
+}
+
+
+.magic {
+
+    grid-column: 1 / -1;
+
+    background:
+        linear-gradient(
+            90deg,
+            #850000,
+            #ff0000
+        );
+
+    box-shadow:
+        0 0 18px #ff000088;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   GAME
+========================= */
+
+#game {
+
+    display: none;
+
+    text-align: center;
+}
+
+
+#game h1 {
+
+    color: #ff2020;
+
+}
+
+
+#score {
+
+    margin: 8px 0 12px;
+
+    font-size: 19px;
+
+    color: #39ff14;
+
+    font-weight: bold;
+}
+
+
+canvas {
+
+    display: block;
+
+    width: min(100%, 330px);
+
+    height: auto;
+
+    margin: auto;
+
+    background: #030303;
+
+    border: 2px solid #ff0000;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 0 22px #ff000088;
+
+    touch-action: none;
+}
+
+
+.msg {
+
+    min-height: 22px;
+
+    color: #ff7777;
+
+    margin: 10px 0;
+}
+
+
+/* =========================
+   GAME BUTTONS
+========================= */
+
+.gameBtns {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 10px;
+}
+
+
+.gameBtns button {
+
+    flex: 1;
+
+    height: 48px;
+}
+
+
+.restart {
+
+    background: #006b12;
+
+}
+
+
+.back {
+
+    background: #350000;
+
+}
+
+
+/* =========================
+   MOBILE GAMEPAD
+========================= */
+
+.gamepad {
+
+    width: 190px;
+
+    height: 155px;
+
+    margin: 15px auto 0;
+
+    position: relative;
+}
+
+
+.pad {
+
+    position: absolute;
+
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 14px;
+
+    background: #171717;
+
+    border: 1px solid #4d0000;
+
+    color: #fff;
+
+    font-size: 25px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    box-shadow:
+        0 0 8px #000;
+
+    user-select: none;
+
+    -webkit-user-select: none;
+}
+
+
+.pad:active {
+
+    background: #a00000;
+
+    box-shadow:
+        0 0 15px #ff0000;
+
+    transform: scale(0.92);
+}
+
+
+.up {
+
+    top: 0;
+
+    left: 66px;
+}
+
+
+.left {
+
+    top: 62px;
+
+    left: 5px;
+}
+
+
+.down {
+
+    top: 62px;
+
+    left: 66px;
+}
+
+
+.right {
+
+    top: 62px;
+
+    left: 127px;
+}
+
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media (max-width: 400px) {
+
+    .card {
+
+        padding: 14px;
+
+    }
+
+    button {
+
+        height: 54px;
+
+    }
+
+    .display {
+
+        height: 70px;
+
+        font-size: 27px;
+
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     CALCULATOR
+================================================== -->
+
+<div class="card" id="calculator">
+
+    <h1>🪄 UzairMagicCalcu</h1>
+
+
+    <input
+        id="display"
+        class="display"
+        value="0"
+        readonly
+    >
+
+
+    <div class="keys">
+
+
+        <button
+            class="clear"
+            onclick="clearDisplay()">
+            C
+        </button>
+
+
+        <button
+            onclick="backspace()">
+            ⌫
+        </button>
+
+
+        <button
+            onclick="addValue('(')">
+            (
+        </button>
+
+
+        <button
+            onclick="addValue(')')">
+            )
+        </button>
+
+
+        <button onclick="addValue('7')">
+            7
+        </button>
+
+        <button onclick="addValue('8')">
+            8
+        </button>
+
+        <button onclick="addValue('9')">
+            9
+        </button>
+
+        <button
+            class="op"
+            onclick="addValue('÷')">
+            ÷
+        </button>
+
+
+        <button onclick="addValue('4')">
+            4
+        </button>
+
+        <button onclick="addValue('5')">
+            5
+        </button>
+
+        <button onclick="addValue('6')">
+            6
+        </button>
+
+        <button
+            class="op"
+            onclick="addValue('×')">
+            ×
+        </button>
+
+
+        <button onclick="addValue('1')">
+            1
+        </button>
+
+        <button onclick="addValue('2')">
+            2
+        </button>
+
+        <button onclick="addValue('3')">
+            3
+        </button>
+
+        <button
+            class="op"
+            onclick="addValue('-')">
+            −
+        </button>
+
+
+        <button onclick="addValue('0')">
+            0
+        </button>
+
+        <button onclick="addValue('.')">
+            .
+        </button>
+
+        <button
+            class="eq"
+            onclick="calculate()">
+            =
+        </button>
+
+        <button
+            class="op"
+            onclick="addValue('+')">
+            +
+        </button>
+
+
+        <button
+            class="magic"
+            onclick="magic()">
+
+            🪄 MAGIC
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================================================
+     SECRET GAME
+================================================== -->
+
+<div class="card" id="game">
+
+    <h1>🐍 SECRET SNAKE</h1>
+
+
+    <div id="score">
+        Score: 0
+    </div>
+
+
+    <canvas
+        id="gameCanvas"
+        width="300"
+        height="300">
+    </canvas>
+
+
+    <div
+        class="msg"
+        id="message">
+
+        Use the gamepad or arrow keys!
+
+    </div>
+
+
+    <!-- MOBILE GAMEPAD -->
+
+    <div class="gamepad">
+
+        <button
+            class="pad up"
+            id="upBtn">
+            ▲
+        </button>
+
+
+        <button
+            class="pad left"
+            id="leftBtn">
+            ◀
+        </button>
+
+
+        <button
+            class="pad down"
+            id="downBtn">
+            ▼
+        </button>
+
+
+        <button
+            class="pad right"
+            id="rightBtn">
+            ▶
+        </button>
+
+    </div>
+
+
+    <div class="gameBtns">
+
+        <button
+            class="restart"
+            onclick="startGame()">
+
+            🔄 Restart
+
+        </button>
+
+
+        <button
+            class="back"
+            onclick="backToCalculator()">
+
+            ← Calculator
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* ==================================================
+   CALCULATOR
+================================================== */
+
+const display =
+    document.getElementById("display");
+
+
+function addValue(value) {
+
+    if (
+
+        display.value === "0" ||
+
+        display.value === "Error" ||
+
+        display.value === "NOPE 😈"
+
+    ) {
+
+        display.value = value;
+
+    }
+
+    else {
+
+        display.value += value;
+
+    }
+
+}
+
+
+/* CLEAR */
+
+function clearDisplay() {
+
+    display.value = "0";
+
+}
+
+
+/* BACKSPACE */
+
+function backspace() {
+
+    if (
+
+        display.value.length <= 1
+
+    ) {
+
+        display.value = "0";
+
+    }
+
+    else {
+
+        display.value =
+            display.value.slice(0, -1);
+
+    }
+
+}
+
+
+/* ==================================================
+   IMPROVED CALCULATOR
+================================================== */
+
+function calculate() {
+
+    try {
+
+        let expression =
+            display.value;
+
+
+        /*
+        Convert calculator symbols
+        into JavaScript operators.
+        */
+
+        expression =
+            expression
+                .replace(/×/g, "*")
+                .replace(/÷/g, "/")
+                .replace(/−/g, "-");
+
+
+        /*
+        Only allow calculator characters.
+        */
+
+        if (
+            !/^[0-9+\-*/().\s]+$/
+                .test(expression)
+        ) {
+
+            throw new Error();
+
+        }
+
+
+        /*
+        Check brackets.
+        */
+
+        let brackets = 0;
+
+
+        for (
+            let char of expression
+        ) {
+
+            if (char === "(")
+                brackets++;
+
+            if (char === ")")
+                brackets--;
+
+            if (brackets < 0)
+                throw new Error();
+
+        }
+
+
+        if (brackets !== 0)
+            throw new Error();
+
+
+        /*
+        Calculate expression.
+        */
+
+        const result =
+            Function(
+                '"use strict"; return (' +
+                expression +
+                ')'
+            )();
+
+
+        /*
+        Check result.
+        */
+
+        if (
+            typeof result !== "number" ||
+            !Number.isFinite(result)
+        ) {
+
+            throw new Error();
+
+        }
+
+
+        /*
+        Remove unnecessary decimals.
+        */
+
+        display.value =
+            Number.isInteger(result)
+                ? result
+                : Number(
+                    result.toFixed(10)
+                );
+
+
+    }
+
+    catch {
+
+        display.value =
+            "Error";
+
+    }
+
+}
+
+
+/* ==================================================
+   MAGIC
+================================================== */
+
+const SECRET_CODE = "1122";
+
+
+function magic() {
+
+    if (
+        display.value === SECRET_CODE
+    ) {
+
+        document
+            .getElementById("calculator")
+            .style.display =
+            "none";
+
+
+        document
+            .getElementById("game")
+            .style.display =
+            "block";
+
+
+        startGame();
+
+    }
+
+    else {
+
+        display.value =
+            "NOPE 😈";
+
+
+        setTimeout(
+            () => {
+
+                display.value = "0";
+
+            },
+            800
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   SNAKE GAME
+================================================== */
+
+const canvas =
+    document.getElementById(
+        "gameCanvas"
+    );
+
+
+const ctx =
+    canvas.getContext("2d");
+
+
+const gridSize = 15;
+
+const tileSize =
+    canvas.width / gridSize;
+
+
+let snake;
+
+let food;
+
+let direction;
+
+let nextDirection;
+
+let score;
+
+let gameLoop;
+
+let gameRunning = false;
+
+
+/* START */
+
+function startGame() {
+
+    clearInterval(gameLoop);
+
+
+    snake = [
+
+        {
+            x: 7,
+            y: 7
+        },
+
+        {
+            x: 6,
+            y: 7
+        },
+
+        {
+            x: 5,
+            y: 7
+        }
+
+    ];
+
+
+    direction = {
+
+        x: 1,
+        y: 0
+
+    };
+
+
+    nextDirection = {
+
+        x: 1,
+        y: 0
+
+    };
+
+
+    score = 0;
+
+
+    gameRunning = true;
+
+
+    document
+        .getElementById("score")
+        .textContent =
+        "Score: 0";
+
+
+    document
+        .getElementById("message")
+        .textContent =
+        "Use the gamepad or arrow keys!";
+
+
+    placeFood();
+
+    draw();
+
+
+    gameLoop =
+        setInterval(
+            updateGame,
+            120
+        );
+
+}
+
+
+/* FOOD */
+
+function placeFood() {
+
+    do {
+
+        food = {
+
+            x:
+                Math.floor(
+                    Math.random() *
+                    gridSize
+                ),
+
+            y:
+                Math.floor(
+                    Math.random() *
+                    gridSize
+                )
+
+        };
+
+    }
+
+    while (
+
+        snake.some(
+            part =>
+                part.x === food.x &&
+                part.y === food.y
+        )
+
+    );
+
+}
+
+
+/* ==================================================
+   UPDATE GAME
+================================================== */
+
+function updateGame() {
+
+    if (!gameRunning)
+        return;
+
+
+    direction =
+        nextDirection;
+
+
+    const head = {
+
+        x:
+            snake[0].x +
+            direction.x,
+
+        y:
+            snake[0].y +
+            direction.y
+
+    };
+
+
+    /* WALL */
+
+    if (
+
+        head.x < 0 ||
+
+        head.x >= gridSize ||
+
+        head.y < 0 ||
+
+        head.y >= gridSize
+
+    ) {
+
+        gameOver();
+
+        return;
+
+    }
+
+
+    /* SELF */
+
+    if (
+
+        snake.some(
+            part =>
+                part.x === head.x &&
+                part.y === head.y
+        )
+
+    ) {
+
+        gameOver();
+
+        return;
+
+    }
+
+
+    snake.unshift(head);
+
+
+    /* FOOD */
+
+    if (
+
+        head.x === food.x &&
+
+        head.y === food.y
+
+    ) {
+
+        score++;
+
+
+        document
+            .getElementById("score")
+            .textContent =
+            "Score: " + score;
+
+
+        placeFood();
+
+    }
+
+    else {
+
+        snake.pop();
+
+    }
+
+
+    draw();
+
+}
+
+
+/* ==================================================
+   DRAW
+================================================== */
+
+function draw() {
+
+    /*
+    Background
+    */
+
+    ctx.fillStyle =
+        "#030303";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /*
+    FOOD
+    */
+
+    ctx.fillStyle =
+        "#ff2020";
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+
+        food.x * tileSize +
+            tileSize / 2,
+
+        food.y * tileSize +
+            tileSize / 2,
+
+        tileSize / 2.8,
+
+        0,
+        Math.PI * 2
+
+    );
+
+
+    ctx.fill();
+
+
+    /*
+    SNAKE
+    */
+
+    snake.forEach(
+        (part, index) => {
+
+            const x =
+                part.x * tileSize;
+
+            const y =
+                part.y * tileSize;
+
+
+            /*
+            Head
+            */
+
+            ctx.fillStyle =
+                index === 0
+                    ? "#39ff14"
+                    : "#16a34a";
+
+
+            /*
+            Rounded shape
+            */
+
+            ctx.beginPath();
+
+
+            ctx.roundRect(
+
+                x + 1,
+
+                y + 1,
+
+                tileSize - 2,
+
+                tileSize - 2,
+
+                7
+
+            );
+
+
+            ctx.fill();
+
+
+            /*
+            Head eyes
+            */
+
+            if (index === 0) {
+
+                ctx.fillStyle =
+                    "#050505";
+
+
+                /*
+                Eyes change position
+                based on direction.
+                */
+
+                let eye1;
+                let eye2;
+
+
+                if (
+                    direction.x === 1
+                ) {
+
+                    eye1 = {
+                        x: x + 14,
+                        y: y + 6
+                    };
+
+                    eye2 = {
+                        x: x + 14,
+                        y: y + 14
+                    };
+
+                }
+
+                else if (
+                    direction.x === -1
+                ) {
+
+                    eye1 = {
+                        x: x + 6,
+                        y: y + 6
+                    };
+
+                    eye2 = {
+                        x: x + 6,
+                        y: y + 14
+                    };
+
+                }
+
+                else if (
+                    direction.y === -1
+                ) {
+
+                    eye1 = {
+                        x: x + 6,
+                        y: y + 6
+                    };
+
+                    eye2 = {
+                        x: x + 14,
+                        y: y + 6
+                    };
+
+                }
+
+                else {
+
+                    eye1 = {
+                        x: x + 6,
+                        y: y + 14
+                    };
+
+                    eye2 = {
+                        x: x + 14,
+                        y: y + 14
+                    };
+
+                }
+
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    eye1.x,
+                    eye1.y,
+                    2,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    eye2.x,
+                    eye2.y,
+                    2,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   GAME OVER
+================================================== */
+
+function gameOver() {
+
+    gameRunning = false;
+
+
+    clearInterval(gameLoop);
+
+
+    document
+        .getElementById("message")
+        .textContent =
+        "💀 GAME OVER! Score: " +
+        score;
+
+}
+
+
+/* ==================================================
+   DIRECTION CONTROL
+================================================== */
+
+function changeDirection(
+    x,
+    y
+) {
+
+    /*
+    Prevent instant reverse.
+    */
+
+    if (
+        direction.x === -x &&
+        direction.y === -y
+    ) {
+
+        return;
+
+    }
+
+
+    nextDirection = {
+
+        x: x,
+        y: y
+
+    };
+
+}
+
+
+/* ==================================================
+   KEYBOARD
+================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (!gameRunning)
+            return;
+
+
+        if (
+            event.key === "ArrowUp"
+        ) {
+
+            changeDirection(
+                0,
+                -1
+            );
+
+        }
+
+
+        else if (
+            event.key === "ArrowDown"
+        ) {
+
+            changeDirection(
+                0,
+                1
+            );
+
+        }
+
+
+        else if (
+            event.key === "ArrowLeft"
+        ) {
+
+            changeDirection(
+                -1,
+                0
+            );
+
+        }
+
+
+        else if (
+            event.key === "ArrowRight"
+        ) {
+
+            changeDirection(
+                1,
+                0
+            );
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   MOBILE GAMEPAD
+================================================== */
+
+function setupPad(
+    id,
+    x,
+    y
+) {
+
+    const button =
+        document.getElementById(id);
+
+
+    /*
+    Touch
+    */
+
+    button.addEventListener(
+        "touchstart",
+        function(event) {
+
+            event.preventDefault();
+
+            if (!gameRunning)
+                return;
+
+            changeDirection(
+                x,
+                y
+            );
+
+        },
+        { passive: false }
+    );
+
+
+    /*
+    Mouse
+    */
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            if (!gameRunning)
+                return;
+
+            changeDirection(
+                x,
+                y
+            );
+
+        }
+    );
+
+}
+
+
+setupPad(
+    "upBtn",
+    0,
+    -1
+);
+
+
+setupPad(
+    "downBtn",
+    0,
+    1
+);
+
+
+setupPad(
+    "leftBtn",
+    -1,
+    0
+);
+
+
+setupPad(
+    "rightBtn",
+    1,
+    0
+);
+
+
+/* ==================================================
+   BACK
+================================================== */
+
+function backToCalculator() {
+
+    clearInterval(gameLoop);
+
+
+    gameRunning = false;
+
+
+    document
+        .getElementById("game")
+        .style.display =
+        "none";
+
+
+    document
+        .getElementById("calculator")
+        .style.display =
+        "block";
+
+
+    display.value = "0";
+
+}
+
+</script>
+
+</body>
+</html>
